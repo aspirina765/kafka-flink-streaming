@@ -32,18 +32,25 @@ def from_kafka_to_kafka_demo():
     register_rides_sink(st_env)
 
     # query
-    st_env.from_path("source").insert_into("sink")
+    st_env.from_path("source-stock").insert_into("sink")
 
     # execute
-    st_env.execute("2-from_kafka_to_kafka")
+    st_env.execute("3-from_kafka_to_kafka")
 
 
+
+# "timestamp": 1611799200,
+# "open": 0.9797100000000001,
+# "high": 0.97996,
+# "low": 0.97874,
+# "close": 0.9790000000000001,
+# "volume": 30128
 def register_rides_source(st_env):
     st_env \
         .connect(  # declare the external system to connect to
         Kafka()
             .version("universal")
-            .topic("Rides")
+            .topic("stock")
             .start_from_earliest()
             .property("zookeeper.connect", "zookeeper:2181")
             .property("bootstrap.servers", "kafka:9092")) \
@@ -51,24 +58,24 @@ def register_rides_source(st_env):
         Json()
             .fail_on_missing_field(True)
             .schema(DataTypes.ROW([
-            DataTypes.FIELD("rideId", DataTypes.BIGINT()),
-            DataTypes.FIELD("isStart", DataTypes.BOOLEAN()),
-            DataTypes.FIELD("eventTime", DataTypes.STRING()),
-            DataTypes.FIELD("lon", DataTypes.FLOAT()),
-            DataTypes.FIELD("lat", DataTypes.FLOAT()),
-            DataTypes.FIELD("psgCnt", DataTypes.INT()),
-            DataTypes.FIELD("taxiId", DataTypes.BIGINT())]))) \
+            DataTypes.FIELD("priceId", DataTypes.BIGINT()),
+            DataTypes.FIELD("timestamp", DataTypes.STRING()),
+            DataTypes.FIELD("open", DataTypes.FLOAT()),
+            DataTypes.FIELD("high", DataTypes.FLOAT()),
+            DataTypes.FIELD("low", DataTypes.FLOAT()),
+            DataTypes.FIELD("close", DataTypes.FLOAT()),
+            DataTypes.FIELD("volume", DataTypes.BIGINT())]))) \
         .with_schema(  # declare the schema of the table
         Schema()
-            .field("rideId", DataTypes.BIGINT())
-            .field("taxiId", DataTypes.BIGINT())
-            .field("isStart", DataTypes.BOOLEAN())
-            .field("lon", DataTypes.FLOAT())
-            .field("lat", DataTypes.FLOAT())
-            .field("psgCnt", DataTypes.INT())
-            .field("eventTime", DataTypes.STRING())) \
+            .field("priceId", DataTypes.BIGINT())
+            .field("timestamp", DataTypes.STRING())
+            .field("open", DataTypes.FLOAT())
+            .field("high", DataTypes.FLOAT())
+            .field("low", DataTypes.FLOAT())
+            .field("close", DataTypes.FLOAT())
+            .field("volume", DataTypes.BIGINT())) \
         .in_append_mode() \
-        .create_temporary_table("source")
+        .create_temporary_table("source-stock")
 
 
 def register_rides_sink(st_env):
@@ -76,30 +83,30 @@ def register_rides_sink(st_env):
         .connect(  # declare the external system to connect to
         Kafka()
             .version("universal")
-            .topic("TempResults")
+            .topic("StockResults")
             .property("zookeeper.connect", "zookeeper:2181")
             .property("bootstrap.servers", "kafka:9092")) \
         .with_format(  # declare a format for this system
         Json()
             .fail_on_missing_field(True)
             .schema(DataTypes.ROW([
-            DataTypes.FIELD("rideId", DataTypes.BIGINT()),
-            DataTypes.FIELD("taxiId", DataTypes.BIGINT()),
-            DataTypes.FIELD("isStart", DataTypes.BOOLEAN()),
-            DataTypes.FIELD("lon", DataTypes.FLOAT()),
-            DataTypes.FIELD("lat", DataTypes.FLOAT()),
-            DataTypes.FIELD("psgCnt", DataTypes.INT()),
-            DataTypes.FIELD("rideTime", DataTypes.STRING())
+            DataTypes.FIELD("priceId", DataTypes.BIGINT()),
+            DataTypes.FIELD("timestamp", DataTypes.STRING()),
+            DataTypes.FIELD("open", DataTypes.FLOAT()),
+            DataTypes.FIELD("high", DataTypes.FLOAT()),
+            DataTypes.FIELD("low", DataTypes.FLOAT()),
+            DataTypes.FIELD("close", DataTypes.FLOAT()),
+            DataTypes.FIELD("volume", DataTypes.BIGINT())
         ]))) \
         .with_schema(  # declare the schema of the table
         Schema()
-            .field("rideId", DataTypes.BIGINT())
-            .field("taxiId", DataTypes.BIGINT())
-            .field("isStart", DataTypes.BOOLEAN())
-            .field("lon", DataTypes.FLOAT())
-            .field("lat", DataTypes.FLOAT())
-            .field("psgCnt", DataTypes.INT())
-            .field("rideTime", DataTypes.STRING())) \
+            .field("priceId", DataTypes.BIGINT())
+            .field("timestamp", DataTypes.STRING())
+            .field("open", DataTypes.FLOAT())
+            .field("high", DataTypes.FLOAT())
+            .field("low", DataTypes.FLOAT())
+            .field("close", DataTypes.FLOAT())
+            .field("volume", DataTypes.BIGINT())) \
         .in_append_mode() \
         .create_temporary_table("sink")
 

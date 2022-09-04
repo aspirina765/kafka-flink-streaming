@@ -61,12 +61,20 @@ def main(args):
         is_tenth = i % 10 == 0
 
         sales = {
-            'seller_id': random.choice(SELLERS),
-            'amount_usd': random.randrange(100, 1000),
-            'sale_ts': int(time.time() * 1000)
+            "seller_id": random.choice(SELLERS),
+            "amount_usd": random.randrange(100, 1000),
+            "sale_ts": int(time.time() * 1000)
         }
 
-        with open('/home/rhel9dev/flik-processor/nodejs/tradingview-websocket/config.json', 'rb') as f:
+        import ast 
+        # JSON_VALUE('{"a b": "true"}', '$.[''a b'']')
+
+        # print(ast.literal_eval(str(json.dumps(sales)).replace("'",'"')))
+        # print(str(json.dumps(sales)).replace("'",'"'))
+
+        # asdads
+
+        with open('/home/rhel9dev/PLATFORM9/RANCHER/FLINK/kafka-flink-streaming/nodejs/tradingview-websocket/config.json', 'rb') as f:
             file = f.read()
             data = json.loads(file)
         

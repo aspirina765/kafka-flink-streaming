@@ -1,0 +1,125 @@
+     playgrounds-kafka-data-producer-1
+335aad5b610f   wurstmeister/kafka:2.12-2.2.1                       "start-kafka.sh"         5 minutes ago    Up 3 minutes                    0.0.0.0:49153->9092/tcp, :::49153->9092/tcp                                        playgrounds-kafka-1
+9a8d8ef57072   pyflink/playgrounds:1.13.0-rc2                      "/docker-entrypoint.…"   5 minutes ago    Up 3 minutes                    6121-6123/tcp, 8081/tcp                                                            playgrounds-taskmanager-1
+d2838d77ab32   pyflink/playgrounds:1.13.0-rc2                      "/docker-entrypoint.…"   19 minutes ago   Up 4 minutes                    6123/tcp, 0.0.0.0:8081->8081/tcp, :::8081->8081/tcp                                playgrounds-jobmanager-1
+59addf590591   wurstmeister/zookeeper:3.4.6                        "/bin/sh -c '/usr/sb…"   19 minutes ago   Up 4 minutes                    22/tcp, 2888/tcp, 3888/tcp, 0.0.0.0:2181->2181/tcp, :::2181->2181/tcp              playgrounds-zookeeper-1
+
+
+
+
+cd playgrounds
+
+docker-compose up -d 
+
+docker-compose down -v
+
+playgrounds-kafka-1
+
+playgrounds-taskmanager-1
+
+playgrounds-jobmanager-1
+
+playgrounds-zookeeper-1
+
+
+docker-compose up -d 
+
+docker-compose down -v
+
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker system prune -a
+
+docker-compose logs jobmanager
+docker-compose logs taskmanager
+docker-compose logs zookeeper
+docker-compose logs kafka
+
+docker-compose exec jobmanager ./bin/flink run -py /opt/examples/table/3-from_kafka_to_kafka.py
+
+docker-compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic StockResults
+
+
+docker-compose up -d 
+
+docker-compose down -v
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker system prune -a
+
+docker-compose logs jobmanager
+docker-compose logs taskmanager
+docker-compose logs zookeeper
+docker-compose logs kafka
+
+docker exec -it broker kafka-topics --create --bootstrap-server localhost:9092 --topic sales-usd 
+
+docker exec -it broker kafka-topics --create --bootstrap-server localhost:9092 --topic sales-euros
+
+
+docker-compose exec jobmanager ./bin/flink run -py /opt/examples/table/2-from_kafka_to_kafka.py
+
+docker-compose exec jobmanager ./bin/flink run -py /opt/examples/table/3-from_kafka_to_kafka.py
+
+docker-compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic TempResults
+
+
+docker-compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic sales-usd
+docker-compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic sales-euros
+
+---
+
+docker-compose exec jobmanager ./bin/flink run -py /opt/examples/table/sales_producer.py
+
+docker-compose exec jobmanager ./bin/flink run -py /opt/examples/table/sales_processor.py
+
+conda activate /home/rhel9dev/anaconda3/envs/fin37
+
+
+---
+
+sudo su 
+
+conda activate /home/rhel9dev/anaconda3/envs/fin37
+
+pip install apache-flink==1.13.0
+
+python -m pip install apache-flink==1.13.0
+
+conda install -c pdrops flink
+
+rm -rf /tmp/output
+
+docker-compose up -d
+
+docker-compose down -v
+
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker system prune -a
+
+#python pyfink-stream.py
+
+python sales_producer.py
+
+python sales_processor.py
+
+find /tmp/output -type f -exec cat {} \;
+
+
+
+
+docker-compose exec jobmanager ./bin/flink run -py /opt/examples/table/2-from_kafka_to_kafka_ws.py
+
+
+
+
+
+
+
+
+
+
+
+
+

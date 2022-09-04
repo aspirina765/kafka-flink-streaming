@@ -18,7 +18,7 @@ const { writeFile, write } = require('fs');
   await connection.close()
   console.log(`Candles for AUDCAD:`, candles[0])
 
-  const path = './config.json';
+  const path = '/home/rhel9dev/PLATFORM9/RANCHER/FLINK/kafka-flink-streaming/playgrounds/examples/table/config.json';
   const config = candles[0]; // { ip: '192.0.2.10', port: 3000 };
   
   const writeFiles = async () => writeFile(path, JSON.stringify(config, null, 2), (error) => {

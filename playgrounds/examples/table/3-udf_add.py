@@ -6,6 +6,16 @@ env_settings = EnvironmentSettings.new_instance().in_batch_mode().use_blink_plan
 t_env = TableEnvironment.create(environment_settings=env_settings)
 t_env.get_config().get_configuration().set_string('parallelism.default', '1')
 
+# add kafka connector dependency
+kafka_jar = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                        'flink-sql-connector-kafka_2.11-1.13.0.jar')
+
+# .set_string("execution.checkpointing.interval", "10s")
+t_env.get_config()\
+        .get_configuration()\
+        .set_string("pipeline.jars", "file://{}".format(kafka_jar))\
+        .set_string("execution.checkpointing.interval", "10s")
+
 add = udf(lambda i, j: i + j, [DataTypes.BIGINT(), DataTypes.BIGINT()], DataTypes.BIGINT())
 
 

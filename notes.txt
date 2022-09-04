@@ -3,6 +3,11 @@ docker exec -it broker kafka-topics --create --bootstrap-server localhost:9092 -
 
 docker exec -it broker kafka-topics --create --bootstrap-server localhost:9092 --topic sales-euros
 
+docker-compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic TempResults
+
+docker-compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic sales-usd
+docker-compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic sales-euros
+
 python -m pip install apache-flink
 
 python sales_producer.py

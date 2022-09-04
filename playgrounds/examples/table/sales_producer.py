@@ -6,6 +6,9 @@ import random
 import time
 import sys
 
+import os 
+
+os.system("pip install confluent_kafka")
 
 from confluent_kafka import Producer
 
@@ -74,7 +77,7 @@ def main(args):
 
         # asdads
 
-        with open('/home/rhel9dev/PLATFORM9/RANCHER/FLINK/kafka-flink-streaming/nodejs/tradingview-websocket/config.json', 'rb') as f:
+        with open('config.json', 'rb') as f:
             file = f.read()
             data = json.loads(file)
         
