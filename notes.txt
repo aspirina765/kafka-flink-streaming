@@ -1,0 +1,95 @@
+
+docker exec -it broker kafka-topics --create --bootstrap-server localhost:9092 --topic sales-usd 
+
+docker exec -it broker kafka-topics --create --bootstrap-server localhost:9092 --topic sales-euros
+
+python -m pip install apache-flink
+
+python sales_producer.py
+
+python sales_processor.py
+
+
+sudo su 
+
+conda activate /home/rhel9dev/anaconda3/envs/fin37
+
+pip install apache-flink==1.13.0
+
+rm -rf /tmp/output
+
+docker-compose up -d
+
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker system prune -a
+
+#python pyfink-stream.py
+
+python sales_producer.py
+
+python sales_processor.py
+
+find /tmp/output -type f -exec cat {} \;
+
+
+
+---
+cd pyflink-payten/DE-payten/pyflink-payten
+
+docker build -t pyflink-image/develop:test .
+
+docker-compose up -d 
+
+
+
+docker-compose exec jobmanager /opt/flink/bin/flink run -py /opt/examples/queries/kafka_to_kafka_app.py
+
+
+
+/opt/examples/queries 
+
+docker-compose exec -it jobmanager /bin/bash
+
+/opt/flink/bin/flink
+
+docker-compose exec -it jobmanager /bin/bash run -py /opt/examples/queries/1-word_count.py
+
+docker-compose exec -it jobmanager /opt/flink/bin/flink run -py /opt/examples/queries/1-word_count.py
+
+docker-compose exec jobmanager /opt/flink/bin/flink run -py /opt/examples/queries/1-word_count.py
+
+docker-compose exec jobmanager /opt/flink/bin/flink run -py /opt/examples/queries/3-word_count.py
+
+docker-compose exec jobmanager /opt/flink/bin/flink run -py /opt/examples/queries/kafka_to_kafka_app.py
+
+
+
+docker-compose exec jobmanager . /bin/flink run -py /opt/examples/queries/1-word_count.py
+
+/home/rhel9dev/flik-processor/pyflink-payten/DE-payten/pyflink-payten/examples/queries/1-word_count.py
+
+docker-compose exec jobmanager . /bin/flink run -py /home/rhel9dev/flik-processor/pyflink-payten/DE-payten/pyflink-payten/examples/queries/1-word_count.py
+
+
+/pyflink-payten/examples/data/input
+
+---
+
+
+sudo su 
+
+kill -9 $(lsof -a -i :2181) | docker-compose up -d
+
+lsof -i :2181
+
+docker build -t pyflink-image/develop:test . 
+
+docker-compose down -v
+
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker system prune -a
+
+
+

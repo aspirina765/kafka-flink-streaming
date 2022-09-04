@@ -1,0 +1,24 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+FROM ververica/flink-statefun:2.2.0
+
+RUN mkdir -p /opt/statefun/modules/greeter
+RUN echo "state.checkpoints.dir: file:///checkpoint-dir" >> $FLINK_HOME/conf/flink-conf.yaml
+RUN echo "state.savepoints.dir: file:///savepoint-dir" >> $FLINK_HOME/conf/flink-conf.yaml
+ADD module.yaml /opt/statefun/modules/greeter
+
+
